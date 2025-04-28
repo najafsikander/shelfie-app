@@ -9,13 +9,23 @@ import Spacer from "../components/Spacer";
 import ThemedText from "../components/ThemedText";
 import ThemedButton from '../components/ThemedButton';
 import ThemedTextInput from '../components/ThemedTextInput';
+import { useUser } from '../../hooks/useUser';
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const {user, login} = useUser();
+
   const handleSubmit = () => {
-    console.log("Login Pressed", email, password);
+    try {
+      console.log("Current User: ", user);
+      console.log("Login Pressed", email, password);
+      login({email, password});
+      console.log("User logged in successfully", user);
+    } catch (error) {
+      console.error("Error logging in user: ", error);
+    }
   }
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
