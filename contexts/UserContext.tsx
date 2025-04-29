@@ -26,8 +26,9 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({children}
             await account.createEmailPasswordSession(email,password);
             const response = await account.get();
             setUser(response);
-        } catch (error) {
-            console.error("Error logging in user: ", error);
+        } catch (error:any) {
+           console.error("Error logging in: ", error);
+           throw Error(error.message);
         }
     };
 
@@ -35,8 +36,9 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({children}
         try {
             const {email, password} = userData;
             await account.create(ID.unique(),email, password);
-        } catch (error) {
-            console.error("Error registering user: ", error);
+        } catch (error:any) {
+            console.error("Error registering: ", error);
+            throw Error(error.message);
         }
     }
     
