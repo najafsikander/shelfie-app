@@ -42,7 +42,8 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({children}
         }
     }
     
-    const logout = () => {
+    const logout = async () => {
+        await account.deleteSession('current');
         setUser(null);
     };
     
