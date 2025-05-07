@@ -2,6 +2,7 @@ import { Tabs } from "expo-router"
 import { Colors } from "../../constants/Colors"
 import { useColorScheme } from "react-native"
 import { Ionicons } from "@expo/vector-icons"
+import UserOnly from "../components/auth/UserOnly"
 
 const DashboardLayout = () => {
   
@@ -9,7 +10,8 @@ const DashboardLayout = () => {
   const theme = Colors[colorScheme ?? "light"]
 
   return (
-    <Tabs screenOptions={{
+    <UserOnly>
+      <Tabs screenOptions={{
         headerShown: false,
         tabBarStyle: {
             backgroundColor: theme.navBackground,
@@ -23,6 +25,7 @@ const DashboardLayout = () => {
     <Tabs.Screen name="books" options={{title:"Books", tabBarIcon: ({focused}) => (<Ionicons size={24} name={focused?'book':'book-outline'} color={focused?theme.iconColorFocused:theme.iconColor}/>)}}/>
     <Tabs.Screen name="create" options={{title:"Create", tabBarIcon: ({focused}) => (<Ionicons size={24} name={focused?'create':'create-outline'} color={focused?theme.iconColorFocused:theme.iconColor}/>)}}/>
     </Tabs>
+    </UserOnly>
   )
 }
 
