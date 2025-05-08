@@ -1,9 +1,9 @@
 import { useRouter } from "expo-router";
 import { useUser } from "../../../hooks/useUser";
 import { useEffect } from "react";
-import { Text } from "react-native";
 
 import { ReactNode } from "react";
+import ThemedLoader from "../ThemedLoader";
 
 const UserOnly = ({ children }: { children: ReactNode }) => {
     const {user,authChecked} = useUser();
@@ -13,7 +13,7 @@ const UserOnly = ({ children }: { children: ReactNode }) => {
         if(authChecked && user === null) return router.replace("/login");
     },[user,authChecked]);
 
-    if(!authChecked || !user) return (<Text>Loading</Text>)
+    if(!authChecked || !user) return (<ThemedLoader/>)
     return children;
 }
 

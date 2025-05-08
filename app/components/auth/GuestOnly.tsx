@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { Text } from "react-native";
 
 import { ReactNode } from "react";
+import ThemedLoader from "../ThemedLoader";
 
 const GuestOnly = ({ children }: { children: ReactNode }) => {
     const {user,authChecked} = useUser();
@@ -13,7 +14,7 @@ const GuestOnly = ({ children }: { children: ReactNode }) => {
         if(authChecked && user !== null) return router.replace("/profile");
     },[user,authChecked]);
 
-    if(!authChecked || user) return (<Text>Loading</Text>)
+    if(!authChecked || user) return (<ThemedLoader/>)
     return children;
 }
 

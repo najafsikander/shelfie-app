@@ -1,6 +1,5 @@
 import {
   StyleSheet,
-  Pressable,
   Text,
   TouchableWithoutFeedback,
   Keyboard,
