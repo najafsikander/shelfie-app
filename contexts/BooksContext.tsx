@@ -1,53 +1,75 @@
-import {createContext, useState, ReactNode} from 'react';
+import { createContext, useState, ReactNode } from "react";
+import { databases } from "../lib/appwrite";
+import { ID, Permission, Role } from "react-native-appwrite";
+import { useUser } from "../hooks/useUser";
 
 interface BooksContextType {
-    books: any[];
-    fetchBooks: () => Promise<void>;
-    fetchBookById: () => Promise<void>;
-    createBook: (data: any) => Promise<void>;
-    deleteBook: (id: any) => Promise<void>;
+  books: any[];
+  fetchBooks: () => Promise<void>;
+  fetchBookById: () => Promise<void>;
+  createBook: (data: any) => Promise<void>;
+  deleteBook: (id: any) => Promise<void>;
 }
 
-const DATABASE_ID = '';
-const COLLECTION_ID = '';
+const DATABASE_ID = process.env.EXPO_PUBLIC_DATABASE_KEY;
+const COLLECTION_ID = process.env.EXPO_PUBLIC_COLLECTION_KEY;
 
 export const BooksContext = createContext<BooksContextType | null>(null);
 
-export const BooksProvider = ({children}: {children: ReactNode}) => {
+export const BooksProvider = ({ children }: { children: ReactNode }) => {
+  const [books, setBooks] = useState([]);
+  const { user } = useUser();
 
-    const [books,setBooks] = useState([]);
-
-    const fetchBooks = async () => {
-        try {
-
-        } catch(err) {
-            console.error('Error caught in fetchBooks inside books context: ', err);
-        }
+  const fetchBooks = async () => {
+    try {
+    } catch (err) {
+      console.error("Error caught in fetchBooks inside books context: ", err);
     }
+  };
 
-    const fetchBookById = async () => {
-        try {
-
-        } catch (err) {
-            console.error('Error caught in fetch book by id inside books context: ', err);
-        }
+  const fetchBookById = async () => {
+    try {
+    } catch (err) {
+      console.error(
+        "Error caught in fetch book by id inside books context: ",
+        err
+      );
     }
+  };
 
-    const createBook = async (data:any) => {
-        try {
-
-        } catch (err) {
-            console.error('Error caught while creating book in books context: ', err);
-        }
+  const createBook = async (data: any) => {
+    try {
+      const newBook = await databases.createDocument(
+        DATABASE_ID!,
+        COLLECTION_ID!,
+        ID.unique(),
+        { ...data, userId: user.$id },
+        [
+          Permission.read(Role.user(user.$id)),
+          Permission.update(Role.user(user.$id)),
+          Permission.delete(Role.user(user.$id)),
+        ]
+      );
+    } catch (err) {
+      console.error("Error caught while creating book in books context: ", err);
     }
+  };
 
-    const deleteBook = async (id:string) => {
-        try {
-
-        } catch (err) {
-            console.error('Error caught while deleting book inside books context: ', err);
-        }
+  const deleteBook = async (id: string) => {
+    try {
+    } catch (err) {
+      console.error(
+        "Error caught while deleting book inside books context: ",
+        err
+      );
     }
+  };
 
-    return (<BooksContext.Provider value={{books,fetchBooks, fetchBookById, createBook, deleteBook}}>{children}</BooksContext.Provider>);
-}
+  return (
+    <BooksContext.Provider
+      value={{ books, fetchBooks, fetchBookById, createBook, deleteBook }}
+    >
+      {children}
+    </BooksContext.Provider>
+  );
+};
