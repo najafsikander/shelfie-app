@@ -1,6 +1,6 @@
-import { createContext, useState, ReactNode } from "react";
+import { createContext, useState, ReactNode, useEffect } from "react";
 import { databases } from "../lib/appwrite";
-import { ID, Permission, Role } from "react-native-appwrite";
+import { ID, Permission, Query, Role } from "react-native-appwrite";
 import { useUser } from "../hooks/useUser";
 
 interface BooksContextType {
@@ -17,11 +17,14 @@ const COLLECTION_ID = process.env.EXPO_PUBLIC_COLLECTION_KEY;
 export const BooksContext = createContext<BooksContextType | null>(null);
 
 export const BooksProvider = ({ children }: { children: ReactNode }) => {
-  const [books, setBooks] = useState([]);
+  const [books, setBooks] = useState<any[]>([]);
   const { user } = useUser();
 
   const fetchBooks = async () => {
     try {
+      const response = await databases.listDocuments(DATABASE_ID!,COLLECTION_ID!,[Query.equal('userId',user.$id)]);
+      console.log('Books: ', response.documents);
+      setBooks(response.documents);
     } catch (err) {
       console.error("Error caught in fetchBooks inside books context: ", err);
     }
@@ -64,6 +67,11 @@ export const BooksProvider = ({ children }: { children: ReactNode }) => {
       );
     }
   };
+
+  useEffect(() => {
+    if(!user) return setBooks([]);
+    fetchBooks();
+  },[user])
 
   return (
     <BooksContext.Provider
