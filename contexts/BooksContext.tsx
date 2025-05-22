@@ -6,7 +6,7 @@ import { useUser } from "../hooks/useUser";
 interface BooksContextType {
   books: any[];
   fetchBooks: () => Promise<void>;
-  fetchBookById: () => Promise<void>;
+  fetchBookById: (id: string) => Promise<any>;
   createBook: (data: any) => Promise<void>;
   deleteBook: (id: any) => Promise<void>;
 }
@@ -30,8 +30,11 @@ export const BooksProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  const fetchBookById = async () => {
+  const fetchBookById = async (id:string) => {
     try {
+      const response = await databases.getDocument(DATABASE_ID!,COLLECTION_ID!,id);
+
+      return response;
     } catch (err) {
       console.error(
         "Error caught in fetch book by id inside books context: ",
