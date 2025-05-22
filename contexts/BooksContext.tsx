@@ -63,6 +63,7 @@ export const BooksProvider = ({ children }: { children: ReactNode }) => {
 
   const deleteBook = async (id: string) => {
     try {
+      await databases.deleteDocument(DATABASE_ID!, COLLECTION_ID!, id);
     } catch (err) {
       console.error(
         "Error caught while deleting book inside books context: ",
